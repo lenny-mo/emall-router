@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/lenny-mo/router/global"
 	"github.com/lenny-mo/router/router"
 
@@ -45,7 +46,7 @@ func main() {
 		web.Handler(ginRouter),
 		web.Registry(consulRegistry))
 
-	webService.Init()
+	webService.Init() // 启动web server 服务器
 
 	if err := webService.Run(); err != nil {
 		fmt.Println(err)

@@ -3,7 +3,6 @@ package payment
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/lenny-mo/router/global"
 
@@ -12,22 +11,23 @@ import (
 )
 
 func GetPaymentHandler(c *gin.Context) {
-	// 在这个函数内部使用payment api 的函数
-	// 尝试使用rpc请求
+	// 从body中获取参数
+	var params GetPaymentParam
+	if err := c.ShouldBindJSON(&params); err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("获取参数成功：", params.PaymentId)
+	}
+
 	client := paymentapi.NewPaymentAPIService("go.micro.api.payment-api", global.GetGlobalRPCService().Client())
 	data, err := client.GetPayment(context.Background(), &paymentapi.GetPaymentRequest{
-		PaymentId: "12",
+		PaymentId: params.PaymentId,
 	})
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println(data)
 	c.String(200, data.PaymentInfo)
-}
-
-type CreatePaymentParam struct {
-	OrderId int64  `json:"orderId" binding:"required"`
-	Method  string `json:"method" binding:"required"`
 }
 
 func CreatePaymentHandler(c *gin.Context) {
@@ -40,10 +40,8 @@ func CreatePaymentHandler(c *gin.Context) {
 		fmt.Println("获取参数成功：", params.Method, params.OrderId)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
-	defer cancel()
 	client := paymentapi.NewPaymentAPIService("go.micro.api.payment-api", global.GetGlobalRPCService().Client())
-	data, err := client.MakePayment(ctx, &paymentapi.MakePaymentRequest{
+	data, err := client.MakePayment(context.TODO(), &paymentapi.MakePaymentRequest{
 		Method:  params.Method,
 		OrderId: params.OrderId,
 	})
@@ -52,12 +50,6 @@ func CreatePaymentHandler(c *gin.Context) {
 		return
 	}
 	fmt.Println(data)
-}
-
-type UpdatePaymentParam struct {
-	PaymentId     string `json:"paymentId" binding:"required"`
-	PaymentMethod string `json:"method"`
-	PaymenStatus  int32  `json:"status"`
 }
 
 func UpdatePaymentHandler(c *gin.Context) {

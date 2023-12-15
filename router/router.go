@@ -34,7 +34,9 @@ func InitRouters() *gin.Engine {
 	cartGroup := ginRouter.Group("/cart")
 	{
 		cartGroup.POST("/add", cart.CreateCartHandler)
-		cartGroup.GET("/get", cart.GetCartHandler)
+		cartGroup.GET("/findall", cart.GetCartHandler)
+		cartGroup.POST("/update", cart.UpdateCartHandler)
+		cartGroup.POST("/delete", cart.DeleteCartHandler)
 	}
 
 	return ginRouter

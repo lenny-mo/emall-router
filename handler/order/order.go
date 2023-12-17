@@ -3,6 +3,7 @@ package order
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lenny-mo/order-api/proto/orderapi"
@@ -74,10 +75,22 @@ func UpdateOrderHandler(c *gin.Context) {
 			Status:       orderapi.OrderStatus(params.Status),
 			OrderData:    params.OrderData,
 		},
+		Oldversion: params.OldVersion,
 	})
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	fmt.Println("data.Rowaffectd: ", data.Rowaffectd)
+}
+
+func GetUUIDHandler(c *gin.Context) {
+	client := orderapi.NewOrderApiService("go.micro.api.order-api", global.GetGlobalRPCService().Client())
+	data, err := client.GenerateUUID(context.TODO(), &orderapi.Empty{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	c.JSON(http.StatusOK, "orderId: "+string(data.Uuid))
+	fmt.Println(data)
 }

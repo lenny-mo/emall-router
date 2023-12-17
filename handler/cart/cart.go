@@ -127,3 +127,27 @@ func DeleteCartHandler(c *gin.Context) {
 	}
 	fmt.Println(data)
 }
+
+type CheckoutParam struct {
+	UserId string `json:"user_id" binding:"required"`
+}
+
+func CheckoutHandler(c *gin.Context) {
+	// 1. 获取参数
+	var param CheckoutParam
+	if err := c.ShouldBindJSON(&param); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// 2. 构造client
+	client := cartapi.NewCartApiService("go.micro.api.cart-api", global.GetGlobalRPCService().Client())
+	data, err := client.Checkout(context.TODO(), &cartapi.CheckoutRequest{
+		UserId: param.UserId,
+	})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(data.Msg)
+}

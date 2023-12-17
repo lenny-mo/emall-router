@@ -22,8 +22,8 @@ require (
 	github.com/hashicorp/serf v0.8.6 // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/klauspost/compress v1.17.4 // indirect
-	github.com/lenny-mo/cart-api v0.0.0-20231215043402-bc620024c84d
-	github.com/lenny-mo/order-api v0.0.0-20231213150722-346fce7a59ac
+	github.com/lenny-mo/cart-api v0.0.0-20231216061546-0fb05a4c41fa
+	github.com/lenny-mo/order-api v0.0.0-20231217140329-72c2787608e7
 	github.com/lenny-mo/payment-api v0.0.0-20231212055245-13d741f8de57
 	github.com/micro/go-micro/v2 v2.9.1
 	github.com/micro/go-plugins/registry/consul/v2 v2.9.1

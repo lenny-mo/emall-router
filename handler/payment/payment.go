@@ -20,7 +20,7 @@ func GetPaymentHandler(c *gin.Context) {
 	}
 
 	client := paymentapi.NewPaymentAPIService("go.micro.api.payment-api", global.GetGlobalRPCService().Client())
-	data, err := client.GetPayment(context.Background(), &paymentapi.GetPaymentRequest{
+	data, err := client.GetPayment(context.TODO(), &paymentapi.GetPaymentRequest{
 		PaymentId: params.PaymentId,
 	})
 	if err != nil {
